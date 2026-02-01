@@ -1,0 +1,28 @@
+#### Chapter 1: Programming as a way of thinking 
+###### Glossary
+- *Arithmetic Operator*: Any symbol that represents arithmetic calculations. Basically your standard calculation symbols like +, -, * (Multiplication), / (Division), // (Integer division aka. floor division), ** (Exponents).
+    - *Integers*: Whole numbers
+    - *Floating-Point numbers*: Decimal numbers
+        - **Note**: When preforming +, -, or * on an integer result will be integer. Using / makes it a Floating-Point number. Divide integers with // to result in an integer
+- *Expression*: Collection of operators and numbers. Python follows order of operations 
+- *Functions*: Similar to functions in excel and R. (e.g. round(###) takes any floating point number and rounds to nearest integer)
+    - *Function Call*: The act of "calling" or using a function.
+- *Strings*: Sequences of letters denoted by quotation marks. 'text' and "text" both work. 
+    - **Note**: Be sure to use quotations (' or ") and **NOT** backticks (`)
+- *Concatenation*: Use of arithmetic operators to manipulate text. 
+    - +: Joins two different texts 
+    - *: Makes multiple copies and joins them
+- *len()*: A function that can be called and provides the legth of a string (Counts letters between quotes but not the quotes itself)
+- *Types*: Similar to variables types in R but in this case "values" instead. 
+    - *type()*: Function that tells you the value type
+        - *Int*: integers
+        - *float*: floating point numbers 
+        - *str*: strings   
+            - **Note**: The above can also be used as functions and typecast values
+- *Natural Language*: Naturally evolved languages that you and I speak everyday. (English, etc.)
+- *Formal Language*: Languages designed by people for specific application. (Arithmetic symbols, Programming, etc.)
+    - *Ambiguity*: Natural languages are meant to be interpreted, Formal language usually only ever has one clear meaning regardless of context.
+    - *Redundancy*: Natural is verbose to make up for misunderstandings due to ambiguity, Formal is less redundant and more concise.
+    - *Literalness*: Natural has idioms and metaphors, Formal means exactly what they say
+- *Bugs*: Programming errors
+- *Debugging*: Process of fixing the errors
