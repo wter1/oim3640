@@ -22,3 +22,6 @@
     - *Syntax Error*: Refers to structure and of a program and rules about the structure. More often than not I'm pretty sure this refers to misspelling something
     - *Runtime Error*: aka. exception; This happens when there are no syntax errors, but something still goes wrong, something exceptional.
     - *Semantic Error*: There is no error message and the code runs, but it doesn't do what you wan't.
+
+###### Excerpts
+- ***Variable naming convention***: They can contain both letters and numbers, but they can't begin with a number. It is legal to use uppercase letters, but it is conventional to use only lower case for variable names.
