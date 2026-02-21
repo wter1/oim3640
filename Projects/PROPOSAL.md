@@ -7,6 +7,10 @@
 ### Idea 
 I want to create a sort of "Choose your own adventure" app. It wouldn't have that much "functionality" other than being a source of entertainment, but I do think that it would cover all core skills listed above.
 
+Ignore everything I said up there. After meeting with Professor Zhi, I've realized that just plain text would be pretty easy with a bunch of if statements and all that. I'm also not the best story creator, so instead I'll go with the idea he suggested of making an RPG. 
+
+The RPG will be based off my favorite game franchise Monster Hunter! It still keeps some element of a "story" but that wouldn't be the focus.
+
 ### What do I need?
 ***Functions:*** I think the functions needed for this would be very basic but still would develop my skills for them. 
 
