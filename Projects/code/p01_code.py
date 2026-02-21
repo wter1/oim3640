@@ -93,6 +93,14 @@ elif Decision_Kulu == "n":
 #####
 """
 1. I need to start creating the game options and figure out randomizer
+2. First the monster will have at least 5 attacks that come out at a "random" discrete chance
+3. After trying to get health I realized there needs to be some interaction between health and dmg
 """
 #####
+
+
+# def Kulu_health():
+
+
+
 
