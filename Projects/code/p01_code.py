@@ -98,8 +98,124 @@ elif Decision_Kulu == "n":
 """
 #####
 
+#making lists of the monster attack names and their dmg values or ranges
+Kulu_Attacks = [("Screech", (1, 2)), 
+                ("Peck", (2, 3)),
+                ("Hip Check", (5, 5)),
+                ("Egg Throw", (4, 6)),
+                ("Rock Throw", (4, 10))]
+
+Rathalos_Attacks = [("Roar", (2, 3)),
+                    ("Rush", (5, 6)),
+                    ("Tail Sweep", (6, 8)),
+                    ("Fly", (8, 9)),
+                    ("Fire Ball", (10, 15))]
+
+Bloobath_Calm = [("Wail", (5, 6)),
+                 ("Horn Attack", (10, 12)),
+                 ("Tail Sweep", (12, 13)),
+                 ("Dig", (15, 20)),
+                 ("Rush", (20, 25))]
+
+Bloodbath_Enraged = [("Wail", (10, 12)),
+                     ("Overheat", (20, 25)),
+                     ("Tail Smash", (20, 23)),
+                     ("Dig", (22, 28)),
+                     ("Raging Rush", (30, 25))]
+
+
+#The seperator lines just help me see the different sections better.
+def combat(name, monster_name): 
+    """This is the main combat loop"""
+
+    #Defining the Health of the player and monsters
+    player_HP = 30
+
+    if monster_name == "Kulu-Ya-Ku":
+        monster_HP = 25
+    elif monster_name == "Rathalos":
+        monster_HP = 50
+    elif monster_name == "Bloodbath Diablos":
+        monster_HP = 100
+#----------------------------------------------------------------------------------------------------------------
+
+    #Monster Introduction text
+    type_text(f"\n\033[32mA wild {monster_name} appears!\033[m")
+
+#----------------------------------------------------------------------------------------------------------------
+    #This is the main loop 
+    while player_HP > 0 and monster_HP > 0:
+        type_text(f"\033[35m{name}\033[m HP: {player_HP}  |  \033[32m{monster_name}\033[m HP: {monster_HP}")
+
+        #The player's turn 
+        type_text(f"\033[1,35m[a] Attack \n[b] Block \n[h] Heal >>>\033[m")
+        player_choice = input().lower().strip()
+
+        while player_choice not in ("a", "b", "h"):
+            type_text("\033[1;35mPlease enter a valid answer from the options provided [a/b/h].\033[m\n")
+            type_text(f"\033[1,35m[a] Attack \n[b] Block \n[h] Heal >>>\033[m")
+            player_choice = input().lower().strip()
+
+#----------------------------------------------------------------------------------------------------------------
+        #Still in the player loop but making the if statements for each choice
+        if player_choice == "a":
+            player_roll = random.randint(1, 20) #Roll the dice!
+
+            if player_roll <= 5:
+                dmg = 0
+            elif player_roll > 5 and player_roll < 18:
+                dmg = 5
+            elif player_roll >= 18:
+                dmg = 10
+
+            monster_HP -= dmg
+
+            if player_roll <= 5:
+                type_text(f"You swing wildly! ... but it misses.")
+            elif player_roll > 5 and player_roll < 18:
+                type_text(f"You swing true and deal \033[31m{dmg}\033[m damage!")
+            elif player_roll >= 18:
+                type_text(f"You swing by pure instinct! You deal \033[31m{dmg}\033[m damage!")
+            
+        elif player_choice == "b":
+            player_roll = random.randint(1, 20) #Roll the dice!
+
+            if player_roll <= 5:
+                defense = 0
+            elif player_roll > 5 and player_roll < 18:
+                defense = 2
+            elif player_roll >= 18:
+                defense = 5
+
+            monster_atk -= defense
+
+            if player_roll <= 5:
+                type_text(f"You hold your Greatsword awkwardly to block and drop it ...")
+            elif player_roll > 5 and player_roll < 18:
+                type_text(f"You make your grip firm and brace to block \033[31m{defense}\033[m damage!")
+            elif player_roll >= 18:
+                type_text(f"Your guard is on point! You block \033[31m{defense}\033[m damage!")
+            
 
 # def Kulu_health():
+#     """This function will determine the health of the Kulu-Ya-Ku and return it as an integer."""
+#     health = random.randint(100, 150) #The health will be a random integer between 100 and 150
+#     return health
+
+# def Kulu_attack():
+#     """This function will determine the attack of the Kulu-Ya-Ku and return it as a string."""
+#     attacks = ["Peck", "Wing Attack", "Tail Swipe", "Egg Throw", "Screech"] #These are the 5 attacks that the Kulu-Ya-Ku can do
+#     attack = random.choice(attacks) #This will randomly select one of the attacks from the list
+#     return attack
+
+
+# while Kulu_health() > 0:
+#     if random.randint(1, 20) <= 3:
+#         type_text(f"\n\033[36mKulu-Ya-Ku:\033[0m {Kulu_attack()}!")
+#     else:
+#         type_text(f"\n\033[36mKulu-Ya-Ku:\033[0m I'm not going to attack you right now!")
+
+
 
 
 
