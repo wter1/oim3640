@@ -26,4 +26,8 @@ oim3640/                     # Main course repository (public)
 ├── mini_projects/           # Mini projects (may be here or separate repos)
 └── README.md                # Portfolio homepage
 
+## My Projects
+
+- [First Project] (./Projects/Project1)
+
 

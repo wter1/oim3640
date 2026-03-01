@@ -24,3 +24,52 @@ I want monsters to have at least 5 attacks, but that might be too ambitious for 
 There are 14 weapons in the real game, but to make things simple, the only weapon the user will be given is a greatsword. 
 
 I may add more monsters if 3 seems to small of a batch. 
+
+
+### After Session 11
+
+
+- Names can't have spaces right now. I need to fix thaty
+
+
+### Vague Areas (From AI)
+
+**Game flow & user interface**
+
+*How does the player navigate? Turn-by-turn prompt? Menu choices?
+What constitutes “winning” or “losing”? Will you have health bars, potions, etc.?*
+
+The main player loop will be a turn by turn prompt. With intermediary sections that shows the aftermath of an action (Health points left for player and monster).
+
+
+**Combat mechanics details**
+
+*You mention ranges (<5 wiff, >18 crit) but not the overall die size (d20? d100?).
+How are damage values calculated? Fixed, random, based on weapon/monster stats?*
+
+It will be a d20 dice and the damage values or number values in general will be fixed
+
+**Inventory/store system**
+
+*What items exist? How do they modify odds (e.g. “+2 to hit”, “–1 to wiff”)?
+How does the player earn currency? Is there a shop menu or pre‑battle load‑out?*
+
+Item's will exist as charms that you can buy from some shop menu and yes they will be additive and subtractive modifications.
+
+**Monster behavior**
+
+*Will monsters choose attacks randomly, or have patterns?
+How does difficulty map to odds (“1 star = x% crit chance, 10 stars = y%”)?
+Do monsters have health or stages?*
+
+I want to implement a pattern, but just to start off, a random choice between options should work. I might scrap the star idea since how difficult the monster is kind of depends on how I 
+
+Data structures & organization
+
+How will you represent monsters/weapons/items? Dictionaries? Classes?
+Error handling & input validation
+
+You already discovered an issue with spaces in names; what other edge cases might there be?
+“Story” or context
+
+Currently there’s only a loose plot (“dispatched to deal with Rathalos”); is there any narrative between fights or an ending screen?
