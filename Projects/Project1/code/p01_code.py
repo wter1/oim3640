@@ -12,7 +12,7 @@ import sys #For the text effect
 """
 #####
 
-def type_text(text, delay=0.05, emphasis=1, pause=0.1):
+def type_text(text, delay=0, emphasis=0, pause=0):
     """This will take a regular f-string and make the letters come out 1 by 1
     
     **text**: Just any character variables
@@ -83,13 +83,6 @@ while Decision_Kulu != "y" and Decision_Kulu != "n": #These conditions make chec
     type_text("\033[1;35mDo you accept? [y/n] >>>\033[m")
     Decision_Kulu = input()
 
-if Decision_Kulu == "y": #I don't think there's any need for this to have a final else statment since the conditions above should cover it
-    type_text(f"\n\033[36mVillage Chief:\033[m Great! I'll lead you to it right now!")
-elif Decision_Kulu == "n":
-    type_text(f"\n\033[36mVillage Chief:\033[m Too scared? We don't need someone like you around, go back to wherever you came from!")
-
-
-
 #####
 """
 1. I need to start creating the game options and figure out randomizer
@@ -98,7 +91,7 @@ elif Decision_Kulu == "n":
 """
 #####
 
-#making lists of the monster attack names and their dmg values or ranges
+#making lists of the monster attack names and their dmg values or ranges (I think I'll have to move all of this to the top)
 Kulu_Attacks = [("Screech", (1, 2)), 
                 ("Peck", (2, 3)),
                 ("Hip Check", (5, 5)),
@@ -121,7 +114,7 @@ Bloodbath_Enraged = [("Wail", (10, 12)),
                      ("Overheat", (20, 25)),
                      ("Tail Smash", (20, 23)),
                      ("Dig", (22, 28)),
-                     ("Raging Rush", (30, 25))]
+                     ("Raging Rush", (25, 30))]
 
 
 #The seperator lines just help me see the different sections better.
@@ -148,13 +141,15 @@ def combat(name, monster_name):
         type_text(f"\033[35m{name}\033[m HP: {player_HP}  |  \033[32m{monster_name}\033[m HP: {monster_HP}")
 
         #The player's turn 
-        type_text(f"\033[1,35m[a] Attack \n[b] Block \n[h] Heal >>>\033[m")
+        type_text(f"\033[1;35m[a] Attack \n[b] Block \n[h] Heal\033[m")
         player_choice = input().lower().strip()
 
         while player_choice not in ("a", "b", "h"):
             type_text("\033[1;35mPlease enter a valid answer from the options provided [a/b/h].\033[m\n")
-            type_text(f"\033[1,35m[a] Attack \n[b] Block \n[h] Heal >>>\033[m")
+            type_text(f"\033[1;35m[a] Attack \n[b] Block \n[h] Heal\033[m")
             player_choice = input().lower().strip()
+        
+        defense = 0
 
 #----------------------------------------------------------------------------------------------------------------
         #Still in the player loop but making the if statements for each choice
@@ -187,33 +182,96 @@ def combat(name, monster_name):
             elif player_roll >= 18:
                 defense = 5
 
-            monster_atk -= defense
-
             if player_roll <= 5:
                 type_text(f"You hold your Greatsword awkwardly to block and drop it ...")
             elif player_roll > 5 and player_roll < 18:
                 type_text(f"You make your grip firm and brace to block \033[31m{defense}\033[m damage!")
             elif player_roll >= 18:
                 type_text(f"Your guard is on point! You block \033[31m{defense}\033[m damage!")
-            
+        
+        elif player_choice == "h":
+            heal_amt = 10
+            player_HP += heal_amt
+            type_text(f"You drink a potion and recover \033[32m{heal_amt}\033[m HP.")
+#----------------------------------------------------------------------------------------------------------------
+        #Monster's turn
+        if monster_name == "Kulu-Ya-Ku":
+            monster_atk = random.choice(Kulu_Attacks)
+        elif monster_name == "Rathalos":
+            monster_atk = random.choice(Rathalos_Attacks)
+        elif monster_name == "Bloodbath Diablos":
+            if monster_HP > 50:
+                monster_atk = random.choice(Bloobath_Calm)
+            else:
+                monster_atk = random.choice(Bloodbath_Enraged)
 
-# def Kulu_health():
-#     """This function will determine the health of the Kulu-Ya-Ku and return it as an integer."""
-#     health = random.randint(100, 150) #The health will be a random integer between 100 and 150
-#     return health
+        monster_dmg = random.randint(monster_atk[1][0], monster_atk[1][1])
+        monster_dmg = max(0, monster_dmg - defense)
 
-# def Kulu_attack():
-#     """This function will determine the attack of the Kulu-Ya-Ku and return it as a string."""
-#     attacks = ["Peck", "Wing Attack", "Tail Swipe", "Egg Throw", "Screech"] #These are the 5 attacks that the Kulu-Ya-Ku can do
-#     attack = random.choice(attacks) #This will randomly select one of the attacks from the list
-#     return attack
+        player_HP -= monster_dmg
+        type_text(f"\n\033[32m{monster_name}:\033[m {monster_atk[0]}! It deals \033[31m{monster_dmg}\033[m damage!")
+
+#----------------------------------------------------------------------------------------------------------------
+    #Out of the while loop now and just checking who won
+    if player_HP <= 0:
+        type_text(f"\033[1;31mYou have been defeated...\033[m")
+        return False
+    else:
+        type_text(f"\033[1;32mYou defeated {monster_name}!\033[m")
+        return True
+
+#####
+"""
+1. I moved the decision down here so I can actually use the combat() function
+2. I need to confirm that answering "n" will end the game and not just skip the combat, and that "y" will start the combat
+"""
+#####
+
+result = None
+if Decision_Kulu == "y": #I don't think there's any need for this to have a final else statment since the conditions above should cover it
+    type_text(f"\n\033[36mVillage Chief:\033[m Great! I'll lead you to it right now!")
+    result = combat(name, "Kulu-Ya-Ku")
+
+elif Decision_Kulu == "n":
+    type_text(f"\n\033[36mVillage Chief:\033[m Too scared? We don't need someone like you around, go back to wherever you came from!")
+    sys.exit()
 
 
-# while Kulu_health() > 0:
-#     if random.randint(1, 20) <= 3:
-#         type_text(f"\n\033[36mKulu-Ya-Ku:\033[0m {Kulu_attack()}!")
-#     else:
-#         type_text(f"\n\033[36mKulu-Ya-Ku:\033[0m I'm not going to attack you right now!")
+#----------------------------------------------------------------------------------------------------------------
+###Kulu-Ya-Ku defeated, now Rathalos decision and combat
+
+#Text depending on if you won or lost
+if result == True:
+    type_text(f"\n\033[36mVillage Chief:\033[m Impressive! You really are a hunter! Then I trust you to handle our bigger problem ...")
+    type_text(f"\033[36mVillage Chief:\033[m The King of the Skies ... that damned \033[31mRathalos\033[m! It's been burning our crops and destroying nearby villages. Will you take care of it?")
+else:
+    type_text(f"\n\033[36mVillage Chief:\033[m What a shame ... I really wanted to believe in you, but you're no hunter. Go back to wherever you came from!")
+    sys.exit()
+
+#Decision if won
+type_text("\033[1;35mDo you accept? [y/n] >>>\033[m")
+Decision_Rathalos = input()
+
+#Ensures decision is valid
+while Decision_Rathalos != "y" and Decision_Rathalos != "n": #These conditions make checking if the input is a char redundant
+    type_text("\033[1;35mPlease enter a valid answer from the options provided [y/n].\033[m\n")
+    type_text("\033[1;35mDo you accept? [y/n] >>>\033[m")
+    Decision_Rathalos = input()
+
+#Choices based on decision
+result = None
+if Decision_Rathalos == "y":
+    type_text(f"\n\033[36mVillage Chief:\033[m I knew you had it in you! I'll lead you to it right now!")
+    result = combat(name, "Rathalos")
+elif Decision_Rathalos == "n":
+    type_text(f"\n\033[36mVillage Chief:\033[m ... you're no hunter, go back to wherever you came from!")
+    sys.exit()
+
+
+
+
+
+
 
 
 

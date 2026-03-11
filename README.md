@@ -28,7 +28,7 @@ oim3640/                     # Main course repository (public)
 
 ## My Projects
 
-- [Projects] (./Projects/Project1/code/p01_code.py)
+- [Project1] (./Projects/Project1/code/p01_code.py)
 
 
 
