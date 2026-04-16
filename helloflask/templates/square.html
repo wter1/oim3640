@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Square Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            width: 200px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        button {
+            padding: 10px 30px;
+            font-size: 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .result-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Square Calculator</h1>
+        <div class="input-group">
+            <input type="number" id="numberInput" placeholder="Enter a number">
+            <button onclick="calculateSquare()">Calculate Square</button>
+        </div>
+        <div id="resultDiv" class="result">
+            <p>The square of <span id="inputValue"></span> is:</p>
+            <div class="result-value" id="resultValue"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateSquare() {
+            const number = document.getElementById('numberInput').value;
+            if (number === '') {
+                alert('Please enter a number');
+                return;
+            }
+            const square = number * number;
+            document.getElementById('inputValue').textContent = number;
+            document.getElementById('resultValue').textContent = square;
+            document.getElementById('resultDiv').classList.add('show');
+            
+            // Update URL without page reload
+            window.history.pushState({}, '', `/square/${number}`);
+        }
+
+        // Allow Enter key to trigger calculation
+        document.getElementById('numberInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateSquare();
+            }
+        });
+
+        // Check if URL contains a number and calculate on page load
+        const pathParts = window.location.pathname.split('/');
+        if (pathParts[1] === 'square' && pathParts[2]) {
+            const number = pathParts[2];
+            document.getElementById('numberInput').value = number;
+            const square = number * number;
+            document.getElementById('inputValue').textContent = number;
+            document.getElementById('resultValue').textContent = square;
+            document.getElementById('resultDiv').classList.add('show');
+        }
+    </script>
+</body>
+</html>

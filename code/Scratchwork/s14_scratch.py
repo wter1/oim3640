@@ -43,3 +43,5 @@ for v in eng2sp.values():
 
 for k, v in eng2sp.items():
     print(k, v)
+
+print(max(eng2sp.values()))

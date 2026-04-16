@@ -1,0 +1,25 @@
+"""Archaic-to-modern word dictionary for the lyrics analyzer."""
+
+ARCHAIC_WORDS = {
+    "art": ("are", "archaic form of 'are', used with 'thou'") ,
+    "aye": ("always", "means 'always' or 'yes' in older English"),
+    "dost": ("do", "archaic second-person singular form of 'do'"),
+    "doth": ("does", "archaic third-person singular form of 'do'") ,
+    "hath": ("has", "archaic third-person singular form of 'have'") ,
+    "hast": ("have", "archaic second-person singular form of 'have'") ,
+    "hearst": ("hear", "archaic second-person singular form of 'hear'") ,
+    "oft": ("often", "archaic word meaning 'frequently'") ,
+    "thee": ("you", "archaic object form of 'you'") ,
+    "thou": ("you", "archaic subject form of 'you'") ,
+    "thy": ("your", "archaic form of 'your'") ,
+    "thine": ("yours", "archaic form of 'yours'") ,
+    "whence": ("from where", "archaic question word for origin"),
+    "wherefore": ("why", "archaic word meaning 'why'") ,
+    "wilt": ("will", "archaic second-person singular form of 'will'") ,
+    "wert": ("were", "archaic second-person singular form of 'be'") ,
+    "ye": ("you", "archaic plural or polite form of 'you'"),
+    "yon": ("that", "archaic word meaning 'that over there'"),
+    "ere": ("before", "archaic word meaning 'before'"),
+    "hither": ("here", "archaic word meaning 'toward this place'"),
+    "thither": ("there", "archaic word meaning 'toward that place'"),
+}
