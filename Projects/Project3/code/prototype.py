@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from math import radians, sin, cos, sqrt, atan2
 
 load_dotenv()
 
@@ -10,6 +11,21 @@ MBTA_API_KEY = os.getenv("MBTA_API_KEY")
 MAPBOX_URL = "https://api.mapbox.com/search/geocode/v6/forward"
 MBTA_STOPS_URL = "https://api-v3.mbta.com/stops"
 
+def calculate_distance_miles(lat1, lon1, lat2, lon2):
+    earth_radius_miles = 3958.8
+
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    return earth_radius_miles * c
 
 def geocode_place(place_name):
     """
@@ -81,6 +97,15 @@ def find_stop_near(place_name):
     place_latitude, place_longitude = geocode_place(place_name)
     stop = find_nearest_stop(place_latitude, place_longitude)
 
+    distance_miles = calculate_distance_miles(
+        place_latitude,
+        place_longitude,
+        stop["latitude"],
+        stop["longitude"]
+    )
+
+    walking_minutes = round(distance_miles / 3 * 60)
+
     return {
         "place_name": place_name,
         "place_latitude": place_latitude,
@@ -89,8 +114,9 @@ def find_stop_near(place_name):
         "wheelchair_accessible": stop["wheelchair_accessible"],
         "stop_latitude": stop["latitude"],
         "stop_longitude": stop["longitude"],
+        "distance_miles": round(distance_miles, 2),
+        "walking_minutes": walking_minutes,
     }
-
 
 def main():
     test_places = [

@@ -19,6 +19,8 @@
         <div class="card">
             <p><strong>You searched for:</strong> {{ result.place_name }}</p>
             <p><strong>Nearest stop:</strong> {{ result.stop_name }}</p>
+            <p><strong>Distance:</strong> {{ result.distance_miles }} miles</p>
+            <p><strong>Estimated walking time:</strong> {{ result.walking_minutes }} minutes</p>
 
             {% if result.wheelchair_accessible %}
                 <p><strong>Wheelchair accessible:</strong> Yes</p>
@@ -56,6 +58,36 @@
             .setLngLat([stopLng, stopLat])
             .setPopup(new mapboxgl.Popup().setText("Nearest MBTA stop: {{ result.stop_name }}"))
             .addTo(map);
+        
+        map.on("load", function () {
+        map.addSource("route-line", {
+            type: "geojson",
+            data: {
+                type: "Feature",
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [placeLng, placeLat],
+                        [stopLng, stopLat]
+                    ]
+                }
+            }
+        });
+
+        map.addLayer({
+            id: "route-line",
+            type: "line",
+            source: "route-line",
+            layout: {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            paint: {
+                "line-color": "#165c96",
+                "line-width": 4
+            }
+        });
+    });
     </script>
 </body>
 </html>
