@@ -10,4 +10,3 @@
 
 **What I don't know yet:** I do not know yet how I would import all these songs. I suspect that instead of manually importing all of them, there should be an api online that. Furthermore, I do not know how I would "match" archaic words to modern words.
 
-**Update from class share:** 

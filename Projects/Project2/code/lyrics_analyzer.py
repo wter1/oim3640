@@ -1,8 +1,13 @@
 """Simple CLI app to translate archaic lyrics into modern language."""
 
 import argparse
+import json
 import re
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
+from typing import Optional
 
 from archaic_dictionary import ARCHAIC_WORDS
 
@@ -13,6 +18,28 @@ def load_text(path: Path) -> str:
 
 def save_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
+
+
+def fetch_lyrics_from_api(artist: str, title: str) -> str:
+    encoded_artist = urllib.parse.quote(artist.strip())
+    encoded_title = urllib.parse.quote(title.strip())
+    url = f"https://api.lyrics.ovh/v1/{encoded_artist}/{encoded_title}"
+    request = urllib.request.Request(url, headers={"User-Agent": "lyrics-analyzer/1.0"})
+
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            if response.status != 200:
+                raise ConnectionError(f"Failed to fetch lyrics: HTTP {response.status}")
+            payload = json.load(response)
+    except urllib.error.HTTPError as exc:
+        raise ConnectionError(f"API request failed: {exc.code} {exc.reason}")
+    except urllib.error.URLError as exc:
+        raise ConnectionError(f"Network error while fetching lyrics: {exc.reason}")
+
+    lyrics = payload.get("lyrics")
+    if not lyrics:
+        raise ValueError("No lyrics were returned by the API.")
+    return lyrics
 
 
 def normalize_word(word: str) -> str:
@@ -70,13 +97,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--input",
         "-i",
-        required=True,
         help="Path to the lyrics text file to analyze.",
+    )
+    parser.add_argument(
+        "--artist",
+        help="Artist name for API lyrics lookup.",
+    )
+    parser.add_argument(
+        "--title",
+        help="Song title for API lyrics lookup.",
     )
     parser.add_argument(
         "--output",
         "-o",
-        help="Output path for the translated lyrics. If not provided, a file named translated_<input> is created.",
+        help="Output path for the translated lyrics. If not provided, a file named translated_<input> or translated_<artist>_<title>.txt is created.",
     )
     parser.add_argument(
         "--report",
@@ -87,19 +121,35 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def default_output_path(input_path: Path) -> Path:
-    return input_path.with_name(f"translated_{input_path.name}")
+def default_output_path(input_path: Optional[Path] = None, artist: Optional[str] = None, title: Optional[str] = None) -> Path:
+    if input_path is not None:
+        return input_path.with_name(f"translated_{input_path.name}")
+
+    safe_artist = urllib.parse.quote(artist or "unknown", safe="")
+    safe_title = urllib.parse.quote(title or "lyrics", safe="")
+    return Path(f"translated_{safe_artist}_{safe_title}.txt")
 
 
 def main() -> None:
     args = parse_args()
-    input_path = Path(args.input)
-    if not input_path.exists():
-        raise FileNotFoundError(f"Input file does not exist: {input_path}")
 
-    lyrics = load_text(input_path)
+    if args.input and (args.artist or args.title):
+        raise ValueError("Use either --input or --artist/--title, not both.")
+
+    if args.input:
+        input_path = Path(args.input)
+        if not input_path.exists():
+            raise FileNotFoundError(f"Input file does not exist: {input_path}")
+        lyrics = load_text(input_path)
+        output_path = Path(args.output) if args.output else default_output_path(input_path=input_path)
+    elif args.artist and args.title:
+        print(f"Fetching lyrics for '{args.artist}' - '{args.title}' from the API...")
+        lyrics = fetch_lyrics_from_api(args.artist, args.title)
+        output_path = Path(args.output) if args.output else default_output_path(artist=args.artist, title=args.title)
+    else:
+        raise ValueError("Either --input or both --artist and --title must be provided.")
+
     translated = translate_text(lyrics, ARCHAIC_WORDS)
-    output_path = Path(args.output) if args.output else default_output_path(input_path)
     save_text(output_path, translated)
 
     print(f"Translated lyrics saved to: {output_path}")
