@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearest MBTA Stop</title>
+</head>
+<body>
+    <h1>Nearest MBTA Stop</h1>
+
+    <p><strong>You searched for:</strong> {{ place }}</p>
+    <p><strong>Nearest stop:</strong> {{ stop_name }}</p>
+
+    {% if wheelchair_accessible %}
+        <p><strong>Wheelchair accessible:</strong> Yes</p>
+    {% else %}
+        <p><strong>Wheelchair accessible:</strong> No</p>
+    {% endif %}
+
+    <a href="/">Search again</a>
+</body>
+</html>
