@@ -30,7 +30,7 @@ from stocks import get_price
 @app.route("/stock/<ticker>")
 def stock(ticker):
     price = get_price(ticker)
-    return f"The current price of {ticker.upper()} is ${price: .2f}."
+    return f"The current price of {ticker.upper()} is ${price: .2f}. "
 
 # from weather import get_weather
 # @app.route("/weather/<city>")
