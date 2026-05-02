@@ -44,17 +44,15 @@ def geocode_place(place_name):
 
 
 def find_nearest_stop(latitude, longitude):
-    """
-    Takes latitude/longitude and returns nearest MBTA stop info.
-    """
     headers = {}
+
     if MBTA_API_KEY:
         headers["x-api-key"] = MBTA_API_KEY
 
     params = {
         "filter[latitude]": latitude,
         "filter[longitude]": longitude,
-        "filter[radius]": 0.01,
+        "filter[radius]": 0.03,
         "sort": "distance",
         "page[limit]": 1,
     }
@@ -71,23 +69,27 @@ def find_nearest_stop(latitude, longitude):
     stop = stops[0]
     attributes = stop["attributes"]
 
-    name = attributes["name"]
-    wheelchair_boarding = attributes.get("wheelchair_boarding")
-
-    wheelchair_accessible = wheelchair_boarding == 1
-
-    return name, wheelchair_accessible
+    return {
+        "name": attributes["name"],
+        "wheelchair_accessible": attributes.get("wheelchair_boarding") == 1,
+        "latitude": attributes["latitude"],
+        "longitude": attributes["longitude"],
+    }
 
 
 def find_stop_near(place_name):
-    """
-    Full pipeline:
-    place name -> Mapbox lat/lng -> nearest MBTA stop
-    """
-    latitude, longitude = geocode_place(place_name)
-    stop_name, wheelchair_accessible = find_nearest_stop(latitude, longitude)
+    place_latitude, place_longitude = geocode_place(place_name)
+    stop = find_nearest_stop(place_latitude, place_longitude)
 
-    return stop_name, wheelchair_accessible
+    return {
+        "place_name": place_name,
+        "place_latitude": place_latitude,
+        "place_longitude": place_longitude,
+        "stop_name": stop["name"],
+        "wheelchair_accessible": stop["wheelchair_accessible"],
+        "stop_latitude": stop["latitude"],
+        "stop_longitude": stop["longitude"],
+    }
 
 
 def main():

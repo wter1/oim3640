@@ -2,18 +2,27 @@
 <html>
 <head>
     <title>MBTA Stop Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Find the Nearest MBTA Stop</h1>
+    <div class="container">
+        <h1>Find the Nearest MBTA Stop</h1>
+        <p>Enter a Boston-area place or address to find the closest MBTA stop.</p>
 
-    <form action="/result" method="POST">
-        <label for="place">Enter a place or address:</label>
-        <input type="text" id="place" name="place" placeholder="Boston Common">
-        <button type="submit">Find Stop</button>
-    </form>
+        <form action="/result" method="POST">
+            <input 
+                type="text" 
+                name="place" 
+                placeholder="Example: Boston Common"
+                required
+            >
+            <button type="submit">Find Stop</button>
+        </form>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>

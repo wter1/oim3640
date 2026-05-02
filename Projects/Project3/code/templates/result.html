@@ -2,19 +2,60 @@
 <html>
 <head>
     <title>Nearest MBTA Stop</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.js"></script>
+    <link 
+        href="https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.css" 
+        rel="stylesheet"
+    >
 </head>
+
 <body>
-    <h1>Nearest MBTA Stop</h1>
+    <div class="container">
+        <h1>Nearest MBTA Stop</h1>
 
-    <p><strong>You searched for:</strong> {{ place }}</p>
-    <p><strong>Nearest stop:</strong> {{ stop_name }}</p>
+        <div class="card">
+            <p><strong>You searched for:</strong> {{ result.place_name }}</p>
+            <p><strong>Nearest stop:</strong> {{ result.stop_name }}</p>
 
-    {% if wheelchair_accessible %}
-        <p><strong>Wheelchair accessible:</strong> Yes</p>
-    {% else %}
-        <p><strong>Wheelchair accessible:</strong> No</p>
-    {% endif %}
+            {% if result.wheelchair_accessible %}
+                <p><strong>Wheelchair accessible:</strong> Yes</p>
+            {% else %}
+                <p><strong>Wheelchair accessible:</strong> No</p>
+            {% endif %}
+        </div>
 
-    <a href="/">Search again</a>
+        <div id="map"></div>
+
+        <a class="back-link" href="/">Search again</a>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = "{{ mapbox_token }}";
+
+        const placeLng = parseFloat("{{ result.place_longitude }}");
+        const placeLat = parseFloat("{{ result.place_latitude }}");
+        const stopLng = parseFloat("{{ result.stop_longitude }}");
+        const stopLat = parseFloat("{{ result.stop_latitude }}");
+
+        const map = new mapboxgl.Map({
+            container: "map",
+            style: "mapbox://styles/mapbox/streets-v12",
+            center: [placeLng, placeLat],
+            zoom: 14
+        });
+
+        new mapboxgl.Marker()
+            .setLngLat([placeLng, placeLat])
+            .setPopup(new mapboxgl.Popup().setText("Your searched location"))
+            .addTo(map);
+
+        new mapboxgl.Marker({ color: "red" })
+            .setLngLat([stopLng, stopLat])
+            .setPopup(new mapboxgl.Popup().setText("Nearest MBTA stop: {{ result.stop_name }}"))
+            .addTo(map);
+    </script>
 </body>
 </html>
